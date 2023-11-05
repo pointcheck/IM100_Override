@@ -20,3 +20,8 @@ Yet, there is a way to work-around this vendor lock-in. A simple analysis shown 
 
 If you decide to implement this vendor lock-in override device, please make sure you disassemble and assemble back your hammer with a) bettery and fuel cartridge removed, b) with gas chamber emptied priorly. Not doing so may lead to unexpected gas ignition and shot causing serious injury! Also, test device with hammer fully assembled and all the nuts are tightened! Please, be precautious!
 
+## Images
+
+[Paslode IM100C with vendor lock-in override installed](Images/IM100_Override_installed_1.jpg)
+[Paslode IM100C with vendor lock-in override installed](Images/IM100_Override_installed_2.jpg)
+

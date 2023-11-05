@@ -46,6 +46,9 @@ main.elf: main.o
 disass:	main.elf
 	$(OBJDUMP) --disassemble-all $^
 
+install_all:
+	avrdude -p t13 -c $(PROG) -P usb -e -U flash:w:main.hex -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U lock:w:$(LOCK):m
+
 install:
 	avrdude -p t13 -c $(PROG) -P usb -e -U flash:w:main.hex 
 
