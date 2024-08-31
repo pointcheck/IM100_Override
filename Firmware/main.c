@@ -10,6 +10,7 @@
 #include <util/delay.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
 
 #define GAS_OFF_TIME_MS	500U
 #define	VREF		3300UL	// Vref = Vcc = 3.3V
@@ -54,6 +55,8 @@ unsigned int calc_pulse(unsigned long adc_mv) {
 
 int main(void)
 {
+	cli();
+
 	DDRB |= (1<<DDB2); // Output: Heartbeat LED
 	PORTB &= ~(1<<PB2); // Turn OFF LED
 
@@ -78,7 +81,18 @@ int main(void)
 	MCUCR = _BV (ISC01); // The falling edge of PCINT0 generates IRQ 
 	GIMSK = _BV (PCIE); // Pin Change Interrupt Enable
 
+	// Enable Watchdog
+        WDTCR |= (1<<WDCE) | (1<<WDE); // Allow WDT reconfig, then enable WDT
+	WDTCR |= (1<<WDCE) | (1<<WDP3); // Allow WDT reconfig, then set timeout to 4s
+	wdt_reset();
+
 	sei();
+
+	// Long blink on statup
+	PORTB |= (1<<PB2);
+	_delay_ms(2000);
+	PORTB &= ~(1<<PB2);
+	wdt_reset();
 
 	while (1) {
 		// Start new the conversion
@@ -86,6 +100,10 @@ int main(void)
 
 		// Toggle Heartbeat LED once a second 
 		PORTB ^= (1<<PB2);
+
+		// Ping watchdog 
+		wdt_reset();
+
 		_delay_ms(1000);
 
 		// Wait ADC to complete conversion
@@ -109,7 +127,7 @@ ISR (PCINT0_vect)
 
 	if ((PINB & (1<<PB0)) == 0) {
 		int i;
-
+	
 		PORTB |= (1<<PB2); // Heartbeat goes LED ON when gas valve open
 		PORTB |= (1<<PB3); // Open gas valve	
 
@@ -125,5 +143,9 @@ ISR (PCINT0_vect)
 	}
 
 	sei();
+}
+
+
+ISR (WDT_vect) {
 }
 
