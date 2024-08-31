@@ -27,7 +27,7 @@ CFLAGS	= $(MCFLAGS) $(INCLUDES) -mmcu=attiny13 -DBUILD_NUMBER=$(BUILD_NUMBER)+1 
 
 #LDFLAGS = -mmcu=atmega16  -Wl,-u,vfprintf -lprintf_flt 
 #LDFLAGS = -mmcu=attiny13  -Wl,-u,vfprintf  
-LDFLAGS = -mmcu=attiny13  
+LDFLAGS = -mmcu=attiny13 -Wl,--stats
 
 
 all: main.hex
